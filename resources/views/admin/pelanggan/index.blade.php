@@ -165,6 +165,46 @@
     </nav>
 
     <main class="content">
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Terjadi kesalahan!</strong>
+                <ul class="mb-0 mt-2">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        @if (session('success'))
+            <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100;">
+                <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert"
+                    aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <strong>Berhasil!</strong> {{ session('success') }}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                            aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const toastElement = document.getElementById('successToast');
+
+                    if (toastElement) {
+                        const toast = new bootstrap.Toast(toastElement, {
+                            delay: 4000
+                        });
+
+                        toast.show();
+                    }
+                });
+            </script>
+        @endif
 
         <nav class="navbar navbar-top navbar-expand navbar-dashboard navbar-dark ps-0 pe-2 pb-0">
             <div class="container-fluid px-0">
@@ -353,7 +393,8 @@
                     <p class="mb-0">List data seluruh pelanggan</p>
                 </div>
                 <div>
-                    <a href="{{ route('pelanggan.create') }}" class="btn btn-success text-white"><i class="far fa-question-circle me-1"></i>
+                    <a href="{{ route('pelanggan.create') }}" class="btn btn-success text-white"><i
+                            class="far fa-question-circle me-1"></i>
                         Tambah Pelanggan</a>
                 </div>
             </div>
@@ -381,7 +422,7 @@
                                         <tr>
                                             <td>{{ $item->first_name }}</td>
                                             <td>{{ $item->last_name }}</td>
-                                            <td>{{ $item->birhday }}</td>
+                                            <td>{{ $item->birthday }}</td>
                                             <td>{{ $item->gender }}</td>
                                             <td>{{ $item->email }}</td>
                                             <td>{{ $item->phone }}</td>
@@ -398,7 +439,8 @@
                                                     Edit
                                                 </a>
 
-                                                <form action="{{ route('pelanggan.destroy', $item->pelanggan_id) }}" method="POST" style="display:inline">
+                                                <form action="{{ route('pelanggan.destroy', $item->pelanggan_id) }}"
+                                                    method="POST" style="display:inline">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm">
